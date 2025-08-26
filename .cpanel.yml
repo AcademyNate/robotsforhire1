@@ -1,0 +1,11 @@
+---
+deployment:
+  tasks:
+    - export REPO=""
+    - export PUBLIC="/home/robotsfo/public_html"
+    - /bin/mkdir -p "/home/robotsfo/backups"
+    - /bin/tar -czf "/home/robotsfo/backups/public_html-.tgz" -C "" .
+    - /bin/find "" -mindepth 1 -maxdepth 1 ! -name ".well-known" -exec rm -rf {} +
+    - /opt/cpanel/ea-nodejs18/bin/npm ci --prefix ""
+    - /opt/cpanel/ea-nodejs18/bin/npm run build --prefix ""
+    - /bin/rsync -av --delete "/build/" "/"
