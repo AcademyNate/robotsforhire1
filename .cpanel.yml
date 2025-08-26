@@ -1,11 +1,11 @@
 ---
 deployment:
   tasks:
-    - export REPO=""
+    - export REPO="$DEPLOYMENT_SOURCE"
     - export PUBLIC="/home/robotsfo/public_html"
     - /bin/mkdir -p "/home/robotsfo/backups"
-    - /bin/tar -czf "/home/robotsfo/backups/public_html-.tgz" -C "" .
-    - /bin/find "" -mindepth 1 -maxdepth 1 ! -name ".well-known" -exec rm -rf {} +
-    - /opt/cpanel/ea-nodejs18/bin/npm ci --prefix ""
-    - /opt/cpanel/ea-nodejs18/bin/npm run build --prefix ""
-    - /bin/rsync -av --delete "/build/" "/"
+    - /bin/tar -czf "/home/robotsfo/backups/public_html-$(date +%F-%H%M%S).tgz" -C "$PUBLIC" .
+    - /bin/find "$PUBLIC" -mindepth 1 -maxdepth 1 ! -name ".well-known" -exec rm -rf {} +
+    - /opt/cpanel/ea-nodejs18/bin/npm ci --prefix "$REPO"
+    - /opt/cpanel/ea-nodejs18/bin/npm run build --prefix "$REPO"
+    - /bin/rsync -av --delete "$REPO/build/" "$PUBLIC/"
